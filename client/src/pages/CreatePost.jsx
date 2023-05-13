@@ -4,8 +4,8 @@ import { preview } from '../assets'
 import { getRandomPrompt } from '../utils'
 import { FormField, Loader } from '../components'
 
-const CreatePost = () => {
-
+const CreatePost = ( { isDark }) => {
+  
   const navigate = useNavigate()
   const [form, setform] = useState({
     name : '',
@@ -21,7 +21,7 @@ const CreatePost = () => {
       try {
         setgeneratingImg(true)
 
-        const response = await fetch('http://localhost:8181/api/v1/dalle', ( {
+        const response = await fetch('https://hitagi.onrender.com/api/v1/dalle', ( {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', },
           body: JSON.stringify({ prompt: form.prompt })
@@ -50,7 +50,7 @@ const CreatePost = () => {
       setloading(true)
 
       try {
-        const response = await fetch('http://localhost:8181/api/v1/post', {
+        const response = await fetch('https://hitagi.onrender.com/api/v1/post', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', },
           body: JSON.stringify(form)
@@ -81,8 +81,8 @@ const CreatePost = () => {
   return (
     <section className='max-w-7xl mx-auto'>
       <div>
-          <h1 className='font-extrabold text-[#222328] text-[32px]'>Create</h1>
-          <p className='mt-2 text-[#666e75] text-[16px] max-w[500px]'>Create imaginative and visually stunning images through DALL-E AI and share the with the Community</p>
+          <h1 className={`font-extrabold ${isDark ? 'text-white' : 'text-[#222328]'} text-[32px]`}>Create</h1>
+          <p className={`mt-2 ${isDark ? 'text-white' : 'text-[#666e75]'} text-[16px] max-w[500px]`}>Create imaginative and visually stunning images through DALL-E AI and share the with the Community</p>
       </div>
 
       <form className='mt-16 max-w-3xl' onSubmit={handleSubmit}>
@@ -94,6 +94,7 @@ const CreatePost = () => {
             placeholder = "John Doe"
             value = {form.name}
             handleChange = {handleChange}
+            isDark = {isDark}
           />
           <FormField 
             labelName = "Prompt"
@@ -104,8 +105,9 @@ const CreatePost = () => {
             handleChange = {handleChange}
             isSurpriseMe
             handleSurpriseMe = {handleSurpriseMe}
+            isDark = {isDark}
           />
-          <div className='relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center'>
+          <div className={`relative ${isDark ? 'bg-slate-500' : 'bg-gray-50'} border ${isDark ? 'border-slate-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center`}>
             {form.photo ? (
               <img src={form.photo} alt={form.prompt} className='w-full h-full object-contain' />
             ) : (
@@ -121,16 +123,16 @@ const CreatePost = () => {
         </div>
 
         <div className='mt-5 flex gap-5'>
-            <button type='button' onClick={generateImage} className='bg-green-700 text-white font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center'>
+            <button type='button' onClick={generateImage} className={`${isDark ? 'bg-[#ac76f8]' : 'bg-green-700'} text-white font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center`}>
               {generatingImg ? 'Generating...' : 'Generate'}
             </button>
         </div>
 
         <div className='mt-10'>
-              <p className='mt-2 text-[#666e75] text-[14px]'>
+              <p className={`mt-2 ${isDark ? 'text-white' : 'text-[#666e75]'} text-[14px]`}>
                 Once you have created the image you want, you can share it with the community
               </p>
-              <button type='submit' className='mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center'>
+              <button type='submit' className={`mt-3 text-white ${isDark ? 'bg-[#FB2576]' : 'bg-[#6469ff]'} font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center`}>
                 {loading ? 'Sharing...' : 'Share with the community'}
               </button>
         </div>
